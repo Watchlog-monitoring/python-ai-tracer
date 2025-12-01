@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="watchlog-ai-tracer",
-    version="0.1.0",
+    version="1.0.0",
     license="MIT",
     description="Lightweight Python tracer for Watchlog AI monitoring",
     long_description=open("README.md", encoding="utf-8").read(),
