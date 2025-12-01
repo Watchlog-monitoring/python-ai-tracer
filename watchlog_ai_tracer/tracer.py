@@ -49,10 +49,21 @@ def is_running_in_k8s():
 _cached_agent_url = None
 def get_agent_url(override=None):
     global _cached_agent_url
+    # Priority 1: explicit override (from config parameter)
     if override:
-        return override
+        return override.rstrip('/')
+    
+    # Priority 2: environment variable
+    env_url = os.getenv('WATCHLOG_AGENT_URL')
+    if env_url:
+        _cached_agent_url = env_url.rstrip('/')
+        return _cached_agent_url
+    
+    # Priority 3: cached value
     if _cached_agent_url:
         return _cached_agent_url
+    
+    # Priority 4: auto-detect based on environment
     if is_running_in_k8s():
         _cached_agent_url = "http://watchlog-node-agent.monitoring.svc.cluster.local:3774"
     else:

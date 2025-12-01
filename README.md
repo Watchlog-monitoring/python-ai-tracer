@@ -87,9 +87,27 @@ tracer.send()
 
 ## Configuration & Environment
 
-- **Local**: defaults to `http://127.0.0.1:3774/ai-tracer`.
-- **Kubernetes**: if running in K8s (service account & DNS check), auto-switches to `http://watchlog-node-agent.monitoring.svc.cluster.local:3774/ai-tracer`.
-- Override via `agent_url` parameter.
+The agent URL is determined in the following priority order:
+
+1. **Explicit config parameter**: `agent_url` in `WatchlogTracer` initialization
+2. **Environment variable**: `WATCHLOG_AGENT_URL` 
+3. **Auto-detection**:
+   - **Local**: defaults to `http://127.0.0.1:3774`
+   - **Kubernetes**: if running in K8s (service account & DNS check), auto-switches to `http://watchlog-node-agent.monitoring.svc.cluster.local:3774`
+
+### Examples
+
+```python
+# Option 1: Pass agent_url directly
+tracer = WatchlogTracer(
+    app="myapp",
+    agent_url="http://my-custom-agent:3774"
+)
+
+# Option 2: Use environment variable
+# export WATCHLOG_AGENT_URL=http://my-custom-agent:3774
+tracer = WatchlogTracer(app="myapp")
+```
 
 ## Contributing
 
